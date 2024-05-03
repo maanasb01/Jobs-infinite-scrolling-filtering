@@ -11,7 +11,31 @@ import {
   colors,
 } from "@mui/material";
 
-export default function JobCard() {
+export default function JobCard({ job }) {
+  const {
+    companyName,
+    jdLink,
+    jobDetailsFromCompany,
+    jobRole,
+    location,
+    logoUrl,
+    maxJdSalary,
+    minExp,
+    minJdSalary,
+  } = job;
+
+  // To render the estimated salary based on the min and max salary props.
+  let estimatedSalary = "Estimated Salary: ";
+
+  if (minJdSalary !== null && maxJdSalary !== null) {
+    estimatedSalary += `$${minJdSalary}k - ${maxJdSalary}k`;
+  } else if (minJdSalary !== null) {
+    estimatedSalary = `Minimum Estimated Salary: $${minJdSalary}k`;
+  } else if (maxJdSalary !== null) {
+    estimatedSalary = `Maximum Estimated Salary: $${maxJdSalary}k`;
+  } else {
+    estimatedSalary += "Salary not provided";
+  }
   return (
     <>
       <Grid item xs={12} md={6} lg={4}>
@@ -29,47 +53,51 @@ export default function JobCard() {
             variant="outlined"
             sx={{
               borderRadius: "1.25rem",
+              height: "30rem",
+              position: "relative",
             }}
           >
             <CardHeader
               sx={{ marginBottom: "-1.5rem" }}
               avatar={
                 <Avatar>
+                  {/* Company's Logo */}
                   <img
-                    src="https://jobs.weekday.works/_next/static/media/logo-small.08826abd.png" //Default Image Source
+                    src={logoUrl}
                     alt="logo"
                     style={{ width: "45px", height: "45px" }}
                   />
                 </Avatar>
               }
               title={
+                // Company's Name
                 <Typography
                   variant=""
                   sx={{ fontWeight: "600", color: "gray" }}
                 >
-                  Company's Name
+                  {companyName}
                 </Typography>
               }
               subheader={
                 <>
-                  <Typography variant="subtitle2">
-                    Job Role
-                  </Typography>
+                  {/* Role and Location */}
+                  <Typography variant="subtitle2">{jobRole}</Typography>
                   <Typography variant="caption" sx={{ fontWeight: "600" }}>
-                    Location
+                    {location ? location : "Not Disclosed"}
                   </Typography>
                 </>
               }
             />
 
             <CardContent>
+              {/* Salary */}
               <Typography
                 variant="body2"
                 sx={{ marginBottom: 1, color: "gray" }}
               >
-                Estimated Salary: ₹10 - 14 LPA
+                {estimatedSalary}
               </Typography>
-
+              {/* About Company Heading */}
               <Typography
                 variant="body1"
                 sx={{ marginBottom: 1, fontWeight: "600" }}
@@ -77,6 +105,7 @@ export default function JobCard() {
                 About Company:
               </Typography>
 
+              {/* Company's Description */}
               <Typography
                 variant="body1"
                 sx={{
@@ -87,12 +116,10 @@ export default function JobCard() {
                   maskImage: "linear-gradient(#000,rgba(0,0,0,0))",
                 }}
               >
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                Repellendus sint praesentium obcaecati sequi, dignissimos 
-                hic ab ad debitis optio. Fuga accusamus harum veniam voluptatem cup
-                iditate consectetur vitae dolorum iste perspiciatis perferendis delectus, eum aperiam sunt excepturi officiis iusto non id!
+                {jobDetailsFromCompany}
               </Typography>
 
+              {/* Container for "View Job" button */}
               <Box
                 sx={{
                   display: "flex",
@@ -107,25 +134,33 @@ export default function JobCard() {
                 </Button>
               </Box>
 
-              <Typography
-                variant="body2"
-                sx={{
-                  marginTop: 2,
-                  fontWeight: "600",
-                  color: colors.grey[500],
-                }}
-              >
-                Minimum Experience
-              </Typography>
-              <Typography variant="body2" sx={{ marginTop: 0.5 }}>
-                1 years
-              </Typography>
+              {/* Minimum Salary Container */}
+              <Box>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    marginTop: 2,
+                    fontWeight: "600",
+                    color: colors.grey[500],
+                  }}
+                >
+                  Minimum Experience
+                </Typography>
+                <Typography variant="body2" sx={{ marginTop: 0.5 }}>
+                  {/* Experience */}
+                  {minExp ? `${minExp} years` : "Not Mentioned by the Company"}
+                </Typography>
+              </Box>
             </CardContent>
+
+            {/* Apply Button COntainer */}
             <Box
               sx={{ display: "flex", justifyContent: "flex-end", padding: 1 }}
             >
               <Button
-                variant=""
+                // Clicking the button would redirect to job Link
+                href={jdLink}
+                target="_blank"
                 sx={{
                   width: "95%",
                   marginX: "auto",
@@ -134,6 +169,8 @@ export default function JobCard() {
                   color: "rgb(0, 0, 0)",
                   fontWeight: 500,
                   padding: "8px 18px",
+                  position: "absolute",
+                  bottom: "0.5rem",
                   "&:hover": {
                     backgroundColor: "rgb(85, 239, 196)",
                   },
