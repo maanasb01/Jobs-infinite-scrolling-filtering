@@ -27,7 +27,7 @@ export const jobCardsSlice = createSlice({
   initialState,
   reducers: {
     nextOffset: (state) => {
-      state.offset += 10;
+      state.offset += 9;
     },
   },
   extraReducers: (builder) => {

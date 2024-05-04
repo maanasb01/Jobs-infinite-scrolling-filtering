@@ -3,7 +3,7 @@ async function fetchJobCards(offset) {
   myHeaders.append("Content-Type", "application/json");
 
   const body = JSON.stringify({
-    limit: 10,
+    limit: 9,
     offset: offset,
   });
 

@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import JobCard from "./JobCard";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useCallback, useEffect, useRef } from "react";
@@ -7,6 +7,7 @@ import {
   nextOffset,
 } from "../features/jobCards/jobCardsSlice";
 import filterCards from "../lib/filterCards";
+import { Oval } from "react-loader-spinner";
 
 export default function Jobs() {
   const dispatch = useDispatch();
@@ -82,9 +83,47 @@ export default function Jobs() {
                 );
               })}
         </Grid>
-        {loading && <div>Loading...</div>}
-        {error && <div>Error: {error}</div>}
       </Container>
+      {loading && (
+        <Container
+          sx={{
+            width: "full",
+            paddingY: "1.5rem",
+            textAlign: "center",
+            height: "1rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Oval
+            visible={loading}
+            height="40"
+            width="40"
+            color="#072694"
+            secondaryColor="blue"
+            strokeWidth={3}
+          />
+        </Container>
+      )}
+
+      {error && (
+        <Container
+          sx={{
+            width: "full",
+            paddingY: "1.5rem",
+            textAlign: "center",
+            height: "1rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6">
+            Some Error Occurred While Getting Data
+          </Typography>
+        </Container>
+      )}
     </>
   );
 }
