@@ -8,6 +8,8 @@ import {
   nextOffset,
 } from "./features/jobCards/jobCardsSlice";
 import Filters from "./components/Filters";
+import { jobPropstoFilterNameMap } from "./config/selectFiltersConfig";
+import filterCards from "./lib/filterCards";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,6 +18,8 @@ function App() {
   const error = useSelector((state) => state.jobCards.error);
   const offset = useSelector((state) => state.jobCards.offset);
   const hasMoreJobs = useSelector((state) => state.jobCards.hasMoreJobs);
+  const selectFilters = useSelector((state) => state.filters.selectFilters);
+  const searchFilters = useSelector((state) => state.filters.searchFilters);
 
   const dataFetchedRef = useRef(false); // To manage calling the initial api once. Due to Stric mode, fetched result was getting concatinated twice.
 
@@ -56,7 +60,8 @@ function App() {
         <Filters />
       </Box>
       <Grid container spacing={4}>
-        {jobCards.map((job, index) => {
+        {/* filterCards is the Main Filter Function to Implement all filters. Imported from lib */}
+        {jobCards && jobCards.filter((job)=>filterCards(job,selectFilters,searchFilters)).map((job, index) => {
           if (jobCards.length === index + 1) {
             return (
               <Grid

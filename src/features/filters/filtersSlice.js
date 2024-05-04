@@ -10,7 +10,7 @@ import selectFiltersConfig from "../../config/selectFiltersConfig";
  *   selectFilters:{
  *     filterName:{
  *       options:[]; // Select Options
- *       selectedValues:[]; // Selected Options,
+ *       selectedValues:[]; // Selected Options, it can be a single option too in case of single-filter
  *     }
  * }
  *
