@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import "./App.css";
 import JobCard from "./components/JobCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import {
   fetchJobCardsAsync,
   nextOffset,
 } from "./features/jobCards/jobCardsSlice";
+import Filters from "./components/Filters";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,8 +37,8 @@ function App() {
 
       intObserver.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting && hasMoreJobs) {
-          dispatch(nextOffset());
           dataFetchedRef.current = false;
+          dispatch(nextOffset());
         }
       });
 
@@ -50,6 +51,10 @@ function App() {
 
   return (
     <Container>
+      <Box sx={{marginBottom:"2rem"}}>
+   
+        <Filters />
+      </Box>
       <Grid container spacing={4}>
         {jobCards.map((job, index) => {
           if (jobCards.length === index + 1) {
