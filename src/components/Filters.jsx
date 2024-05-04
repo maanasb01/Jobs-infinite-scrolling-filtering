@@ -18,6 +18,7 @@ export default function Filters() {
   const searchFilters = useSelector((state) => state.filters.searchFilters);
   const jobCards = useSelector((state) => state.jobCards.jobCards);
 
+// To Update all Filter Options when the JobCards update from infinite Scroll
   useEffect(() => {
     if (jobCards.length === 0) return;
 
@@ -76,6 +77,7 @@ export default function Filters() {
     }
   }, [selectFilters["remoteOnsite"]]);
 
+  // Function to determine if only remote is selected or not in remote filter
   function isOnlyRemoteSelected() {
     const selectedValues = selectFilters["remoteOnsite"]?.selectedValues;
     return (
