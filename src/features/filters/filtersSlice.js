@@ -1,22 +1,60 @@
 import { createSlice } from "@reduxjs/toolkit";
 import selectFiltersConfig from "../../config/selectFiltersConfig";
 
+/**
+ * State Structure:
+ * State:{
+ *   searchFilters:{
+ *     companyName:"";
+ * },
+ *   selectFilters:{
+ *     filterName:{
+ *       options:[]; // Select Options
+ *       selectedValues:[]; // Selected Options,
+ *     }
+ * }
+ *
+ * }
+ */
+
+// Options and SelectedValues are arrays of Objects, each object of form {value:"value",label:"label"} as for select component, react-select is used.
 const initialState = {
-  filterValues: {
+  searchFilters: {
     companyName: "",
   },
+  selectFilters: {},
 };
 
 // Add all the FilterValues from the config file for all the filters. For all Select filters
 selectFiltersConfig.forEach((filter) => {
-  initialState.filterValues[filter.filterName] = [];
+  let options = filter.options ? filter.options : []; // For the Remote/On-Site Select filter
+  initialState.selectFilters[filter.filterName] = {
+    options,
+    selectedValues: [],
+  };
 });
 
 const filtersSlice = createSlice({
   name: "filters",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectFilterOptions(state, action) {
+      const { filterName, newOptions } = action.payload;
+      state.selectFilters[filterName].options = newOptions;
+    },
+    setSelectFilterValues(state, action) {
+      const { filterName, newValues } = action.payload;
+      state.selectFilters[filterName].selectedValues = newValues;
+    },
+    setSearchFilterValue(state, action) {
+      state.searchFilters["companyName"] = action.payload;
+    },
+  },
 });
 
-export const { setFilter, updateFilterOptions } = filtersSlice.actions;
+export const {
+  setSelectFilterOptions,
+  setSelectFilterValues,
+  setSearchFilterValue,
+} = filtersSlice.actions;
 export default filtersSlice.reducer;
