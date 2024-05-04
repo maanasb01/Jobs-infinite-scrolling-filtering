@@ -1,43 +1,51 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import fetchJobCards from '../../api/fetchJobCards';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import fetchJobCards from "../../api/fetchJobCards";
 
 const initialState = {
   // List of Job Cards which are to be fetched.
-  jobCards:[],
-  loading:false,
-  error:null,
-}
+  jobCards: [],
+  offset: 0, // Offset to be used in fetching the data
+  hasMoreJobs: false,
+  loading: false,
+  error: null,
+};
 
 export const fetchJobCardsAsync = createAsyncThunk(
-  'jobCards/fetchJobCards',
-  async () => {
+  "jobCards/fetchJobCards",
+  async (offset) => {
     try {
-      const response = await fetchJobCards(); // API call to fetch job cards
+      const response = await fetchJobCards(offset); // API call to fetch job cards
       return response.jdList;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   }
 );
 
 export const jobCardsSlice = createSlice({
-  name: 'jobCards',
+  name: "jobCards",
   initialState,
-  reducers: {},
-  extraReducers:(builder)=>{
+  reducers: {
+    nextOffset: (state) => {
+      state.offset += 10;
+    },
+  },
+  extraReducers: (builder) => {
     builder
-    .addCase(fetchJobCardsAsync.pending,(state)=>{
-      state.loading = true;
-    })
-    .addCase(fetchJobCardsAsync.fulfilled,(state,action)=>{
-      state.loading = false;
-      state.jobCards = action.payload;
-    })
-    .addCase(fetchJobCardsAsync.rejected,(state,action)=>{
-      state.loading=false;
-      state.error = action.error.message;
-    })
-  }
-})
+      .addCase(fetchJobCardsAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchJobCardsAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.jobCards = state.jobCards.concat(action.payload); // Append new job cards
+        state.hasMoreJobs = action.payload.length > 0; //If returned array is empty, then there are no more jobs to fetch.
+      })
+      .addCase(fetchJobCardsAsync.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  },
+});
 
 export default jobCardsSlice.reducer;
+export const { nextOffset } = jobCardsSlice.actions;

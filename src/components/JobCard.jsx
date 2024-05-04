@@ -38,7 +38,7 @@ export default function JobCard({ job }) {
   }
   return (
     <>
-      <Grid item xs={12} md={6} lg={4}>
+      
         <Paper
           elevation={2}
           sx={{
@@ -181,7 +181,7 @@ export default function JobCard({ job }) {
             </Box>
           </Card>
         </Paper>
-      </Grid>
+
     </>
   );
 }
