@@ -16,7 +16,7 @@ export default function filterCards(job, selectFilters, searchFilters) {
     if (filterName === "minExp") {
       const jobMinExp = job.minExp;
       if (!jobMinExp) return false;
-      return jobMinExp >= filter.selectedValues.value; // as minExp is a single filter
+      return jobMinExp <= filter.selectedValues.value; // as minExp is a single filter
     } else if (filterName === "location") {
       const jobLocation = job.location;
       //check the remote filter
